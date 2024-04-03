@@ -1,1 +1,3 @@
-# GO_STOCK_API_POSTGRES
+# GO STOCK API POSTGRES
+
+A stock API built with GO and postgres
