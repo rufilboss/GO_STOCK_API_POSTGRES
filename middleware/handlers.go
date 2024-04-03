@@ -37,3 +37,7 @@ func CreateConnection() *sql.DB {
 	fmt.Println("Connection to postgres db established")
 	return db
 }
+
+func CreateStock(){
+	
+}
