@@ -1,9 +1,12 @@
 package middleware
 
 import (
+	"GO_STOCK_API_POSTGRES/models"
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -38,6 +41,37 @@ func CreateConnection() *sql.DB {
 	return db
 }
 
-func CreateStock(){
-	
+func CreateStock(w http.ResponseWriter, r *http.Request) {
+	var stock models.Stock
+
+	err := json.NewDecoder(r.Body).Decode(&stock)
+
+	if err != nil {
+		log.Fatalf("Failed to decode body: %v", err)
+	}
+
+	insertID := insertStock(stock)
+
+	res := response{
+		ID: insertID,
+		Message: "stock created successfully",
+	}
+
+	json.NewDecoder(w).Encode(res)
+}
+
+func GetStock() {
+
+}
+
+func GetAllStock() {
+
+}
+
+func UpdateStock() {
+
+}
+
+func DeleteStock() {
+
 }
