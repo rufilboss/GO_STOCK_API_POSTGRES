@@ -203,7 +203,13 @@ func getAllStocks() ([]models.Stock, error) {
 	defer rows.Close()
 	for rows.Next(){
 		var stock models.Stock
+		err = roms.Scan(&stock.StockID, &stock.Name, &stock.Price, &stock.Company)
+
+		if err != nil {
+			log.Fatalf("Unable to scan stock: %v", err)
+		}
 	}
+	return stocks, err
 }
 
 func updateStock(id int64, stock models.Stock) int64 {
