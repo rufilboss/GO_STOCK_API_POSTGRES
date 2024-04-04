@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"GO_STOCK_API_POSTGRES/models"
+	// "GO_STOCK_API_POSTGRES/models"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -62,7 +62,7 @@ func CreateStock(w http.ResponseWriter, r *http.Request) {
 		Message: "stock created successfully",
 	}
 
-	json.NewDecoder(w).Encode(res)
+	json.NewEncoder(w).Encode(res)
 }
 
 func GetStock(w http.ResponseWriter, r *http.Request) {
@@ -126,7 +126,7 @@ func UpdateStock(w http.ResponseWriter, r *http.Request) {
 func DeleteStock(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
-	id, err := strconv.ParseInt(params["id"])
+	id, err := strconv.Atoi(params["id"])
 	if err != nil {
 		log.Fatalf("Unable to convert id %v to int.", err)
 	}
