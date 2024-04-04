@@ -201,9 +201,9 @@ func getAllStocks() ([]models.Stock, error) {
 	}
 
 	defer rows.Close()
-	for rows.Next(){
+	for rows.Next() {
 		var stock models.Stock
-		err = roms.Scan(&stock.StockID, &stock.Name, &stock.Price, &stock.Company)
+		err = rows.Scan(&stock.StockID, &stock.Name, &stock.Price, &stock.Company)
 
 		if err != nil {
 			log.Fatalf("Unable to scan stock: %v", err)
@@ -213,9 +213,42 @@ func getAllStocks() ([]models.Stock, error) {
 }
 
 func updateStock(id int64, stock models.Stock) int64 {
+	db := createConnection()
+	defer db.Close()
+	sqlStatement := `UPDATE stocks SET name=$2, price=$3, company=$4 WHERE stockid=$1`
 
+	res, err := db.Exec(sqlStatement, id, stock.Name, stock.Price, stock.Company)
+
+	if err != nil {
+		log.Fatalf("Unable to execute query: %v", err)
+	}
+
+	rowsAffected, err := res.RowsAffected()
+
+	if err != nil {
+		log.Fatalf("Error while checking rows affected: %v", err)
+	}
+
+	fmt.Printf("Total rows affected: %v\n", rowsAffected)
+	return rowsAffected
 }
 
 func deleteStock(id int64) int64 {
+	db := createConnection()
+	defer db.Close()
+
+	sqlStatement := `DELETE FROM stocks WHERE stockid=$1`
+	res, err := db.Exec(sqlStatement, id)
+	if err != nil {
+		log.Fatalf("Unable to execute the query: %v", err)
+	}
+	rowsAffected, err := res.RowsAffected()
+
+	if err != nil {
+		log.Fatalf("Error while checking rows affected: %v", err)
+	}
+
+	fmt.Printf("Total rows/record affected: %v\n", rowsAffected)
+	return rowsAffected
 
 }
